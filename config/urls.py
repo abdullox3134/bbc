@@ -48,6 +48,6 @@ urlpatterns = [
     path('connection/', include('connection.urls')),
     path('credit-conditions/', include('credit_conditions.urls')),
     path('news/', include('news.urls')),
-    path('personal-cabinet/', include('personal_cabinet.urls')),
     path('slider/', include('slider.urls')),
+    path('users/', include('users.urls')),
 ]
