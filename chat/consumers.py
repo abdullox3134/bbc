@@ -16,6 +16,7 @@ User = get_user_model()
 from django.utils import timezone
 import logging
 
+
 class ChatConsumer(WebsocketConsumer):
 
     def connect(self, **kwargs):
@@ -39,9 +40,6 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name, self.channel_name
         )
 
-
-
-
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -55,7 +53,8 @@ class ChatConsumer(WebsocketConsumer):
 
         # Get user and room instances
         room = Room.objects.get(name=self.room_name)
-        user = User.objects.filter(id=username).first()
+        user = User.objects.filter(email=username).first()
+        print(user)
         if not user:
             user = None
 
