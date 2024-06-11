@@ -123,7 +123,7 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bbc_db',
+        'NAME': 'bbc',
         'USER': 'bbc_user',
         'PASSWORD': 'bbc_password',
         'HOST': 'localhost',
