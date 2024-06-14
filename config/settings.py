@@ -183,6 +183,9 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'language-code',
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
