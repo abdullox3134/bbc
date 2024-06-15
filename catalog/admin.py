@@ -7,15 +7,15 @@ from catalog.models import Logo, Car, InstallmentPlan, Sub
 class LogoAdmin(admin.ModelAdmin):
     list_display = ('title', 'created_at', 'updated_at', 'order',)
     search_fields = ('title',)
-    fields = ('title_uz', 'title_ru', 'description_uz', 'description_ru', 'image', 'order',)
+    fields = ('title_uz', 'title_ru', 'description_uz', 'description_ru', 'image', 'link', 'order',)
 
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created_at', 'updated_at', 'order',)
+    list_display = ('title', 'automatic', 'mechanic', 'discount', 'created_at', 'updated_at', 'order',)
     search_fields = ('title',)
     fields = ('title_uz', 'title_ru', 'description_uz', 'description_ru', 'price', 'year', 'km', 'color_uz', 'color_ru',
-              'image', 'order', 'logo',)
+              'image', 'automatic', 'mechanic', 'discount', 'order', 'logo',)
 
 
 class SubInline(admin.TabularInline):

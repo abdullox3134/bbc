@@ -5,13 +5,16 @@ from catalog.models import Logo, Car, InstallmentPlan, Sub
 class LogoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Logo
-        fields = ('id', 'title', 'description', 'image', 'order', 'created_at', 'updated_at',)
+        fields = ('id', 'title_uz', 'title_ru', 'description_uz', 'description_ru', 'image', 'link', 'order',
+                  'created_at', 'updated_at',)
 
 
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
-        fields = ('id', 'title', 'description', 'price', 'year', 'km', 'color', 'image', 'order', 'logo', 'created_at', 'updated_at',)
+        fields = ('id', 'title_uz', 'title_ru', 'description_uz', 'description_ru', 'price', 'year', 'km', 'color_uz',
+                  'color_ru', 'image', 'automatic', 'mechanic', 'discount', 'order', 'logo', 'created_at',
+                  'updated_at',)
 
 
 class SubSerializer(serializers.ModelSerializer):

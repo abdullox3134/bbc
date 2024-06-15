@@ -5,6 +5,7 @@ class Logo(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     image = models.FileField(upload_to='media/logo/image/', blank=True, null=True)
+    link = models.URLField(blank=True, null=True)
     order = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,6 +28,9 @@ class Car(models.Model):
     image = models.FileField(upload_to='media/car/image/', blank=True, null=True)
     order = models.IntegerField(blank=True, null=True)
     logo = models.ForeignKey(Logo, on_delete=models.CASCADE, blank=True, null=True)
+    automatic = models.BooleanField(default=False, blank=True, null=True)
+    mechanic = models.BooleanField(default=False,blank=True, null=True)
+    discount = models.BooleanField(default=False,blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
