@@ -5,4 +5,10 @@ from . import models
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Message
-        fields = '__all__'
+        fields = ['id', 'content', 'timestamp', 'is_viewed', 'user', 'room']
+
+
+class UnreadMessageCountSerializer(serializers.Serializer):
+    unread_count = serializers.IntegerField()
+    last_message = serializers.DictField()
+

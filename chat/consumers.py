@@ -9,12 +9,12 @@ from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth import get_user_model
 
 from .models import Room, Message
-from .serializers import MessageSerializer
+# from .serializers import MessageSerializer
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
+# import logging
 from django.utils import timezone
-import logging
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -23,9 +23,8 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
 
-        if not Room.objects.filter(name=self.room_name).exists():
-            self.close()
-            return
+        if not Room.objects.filter(name=self.room_name):
+            Room.objects.create(name=self.room_name)
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -44,7 +43,7 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
-        username = text_data_json.get("username", "Anonymous")
+        username = text_data_json.get("username", None)
 
         # Extract user information
         # user = self.scope["user"]
@@ -53,10 +52,11 @@ class ChatConsumer(WebsocketConsumer):
 
         # Get user and room instances
         room = Room.objects.get(name=self.room_name)
-        user = User.objects.filter(email=username).first()
-        print(user)
+        user = User.objects.filter(id=username).first()
         if not user:
             user = None
+
+        room.user.add(user)
 
         # Save the message to the database
         Message.objects.create(
@@ -87,6 +87,9 @@ class ChatConsumer(WebsocketConsumer):
                                         "username": username
                                         }))
 
+
+
+
 # class MessageConsumer(ListModelMixin, GenericAsyncAPIConsumer, CreateModelMixin):
 #     queryset = Message.objects.all()
 #     serializer_class = MessageSerializer
@@ -94,7 +97,10 @@ class ChatConsumer(WebsocketConsumer):
 #     def get_queryset(self, **kwargs):
 #         qs = super().get_queryset(**kwargs)
 #         user = self.scope['user']
-#         return qs.filter(room__name=self.scope['url_route']['kwargs']['room_name'])
+#         room_name = self.scope['url_route']['kwargs']['room_name']
+#         queryset = qs.filter(room__name=room_name)
+#
+#         return queryset
 #
 #     async def connect(self, **kwargs):
 #         await super().connect()
