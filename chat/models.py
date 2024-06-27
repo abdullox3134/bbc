@@ -29,4 +29,4 @@ class Message(models.Model):
     is_viewed = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
-        return f'{self.user.email if self.user else "Anonymous"}'
+        return f'{self.user.email if self.user else "Anonymous"} | {self.room.name}'

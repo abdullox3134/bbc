@@ -9,11 +9,11 @@ from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth import get_user_model
 
 from .models import Room, Message
-# from .serializers import MessageSerializer
+from .serializers import MessageSerializer
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
-# import logging
+import logging
 from django.utils import timezone
 
 
@@ -23,8 +23,25 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
 
-        if not Room.objects.filter(name=self.room_name):
-            Room.objects.create(name=self.room_name)
+        room, created = Room.objects.get_or_create(name=self.room_name)
+
+        # Room name foydalanuvchi ID'siga to'g'ri kelishini nazarda tutamiz
+        user = User.objects.filter(id=self.room_name).first()
+        if not user:
+            user = None
+        room.user.add(user)
+
+        # Ulanayotgan foydalanuvchidan boshqa hamma xabarlarni is_viewed ni True qilib yangilash
+        # Message.objects.filter(room=room).exclude(user=user).update(is_viewed=True)
+
+        # if not Room.objects.filter(name=self.room_name):
+        #     Room.objects.create(name=self.room_name)
+        #     room = Room.objects.get(name=self.room_name)
+        #     user = User.objects.filter(id=self.room_name).first()
+        #     if not user:
+        #         user = None
+        #
+        #     room.user.add(user)
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -86,8 +103,6 @@ class ChatConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({"message": message,
                                         "username": username
                                         }))
-
-
 
 
 # class MessageConsumer(ListModelMixin, GenericAsyncAPIConsumer, CreateModelMixin):

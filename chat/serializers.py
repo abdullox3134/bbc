@@ -11,4 +11,3 @@ class MessageSerializer(serializers.ModelSerializer):
 class UnreadMessageCountSerializer(serializers.Serializer):
     unread_count = serializers.IntegerField()
     last_message = serializers.DictField()
-

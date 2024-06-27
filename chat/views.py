@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from chat.models import Room, Message
 from .serializers import MessageSerializer, UnreadMessageCountSerializer
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 class MessagePagination(PageNumberPagination):
@@ -19,7 +19,7 @@ class RoomMessageListView(ListAPIView):
     serializer_class = MessageSerializer
     pagination_class = MessagePagination
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter]  # Ro'yxat sifatida aniqlangan
 
     def get_queryset(self):
         room_name = self.kwargs['room_name']
@@ -44,27 +44,39 @@ class UnreadMessageCountView(APIView):
         except Room.DoesNotExist:
             return Response({"detail": "This room does not exist."}, status=404)
 
-        if request.user in room.user.all():
-            unread_count = None
-            last_message_content = None
-            serializer = UnreadMessageCountSerializer({'unread_count': unread_count,
-                                                       'last_message': last_message_content})
-            return Response(serializer.data)
-        else:
-            unread_count = Message.objects.filter(room=room, is_viewed=False).count()
-            last_message = Message.objects.filter(room=room, is_viewed=False).last()
+        # Faqat request.user yozmagan xabarlarni qidirish
+        unread_messages = Message.objects.filter(room=room, is_viewed=False).exclude(user=request.user)
+        unread_count = unread_messages.count()
+        last_message = unread_messages.last()
 
-            if last_message:
-                last_message_data = {
-                    'sender': last_message.user.username,
-                    'content': last_message.content[:10],
-                    # Yoki boshqa last_message attributlari
-                }
-            else:
-                last_message_data = None
-            serializer = UnreadMessageCountSerializer({'unread_count': unread_count,
-                                                       'last_message': last_message_data})
-            return Response(serializer.data)
+        if last_message:
+            last_message_data = {
+                'sender': last_message.user.username,
+                'content': last_message.content[:10],
+                # Yoki boshqa last_message attributlari
+            }
+        else:
+            last_message_data = None
+
+        serializer = UnreadMessageCountSerializer({
+            'unread_count': unread_count,
+            'last_message': last_message_data
+        })
+
+        return Response(serializer.data)
+
+
+class MarkMessagesAsViewed(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, room_name):
+        room = get_object_or_404(Room, name=room_name)
+        user = request.user
+
+        # Barcha xabarlarning is_viewed maydonini yangilash
+        Message.objects.filter(room=room).exclude(user=user).update(is_viewed=True)
+
+        return Response({"status": "success", "message": "All messages marked as viewed"})
 
 
 def index(request):
