@@ -42,6 +42,14 @@ class Car(models.Model):
         verbose_name_plural = 'Cars'
 
 
+class Image(models.Model):
+    car = models.ForeignKey(Car, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='media/car/image/')
+
+    def __str__(self):
+        return self.image.url
+
+
 class InstallmentPlan(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='installment_plans', blank=True, null=True)
 

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     "daphne",
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -191,3 +192,66 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+JAZZMIN_SETTINGS = {
+    "site_title": "Foydali Havolalar",
+    "site_brand": "BBC",
+    "site_logo": "mers.jpeg",
+    "welcome_sign": "Xush Kelibsiz",
+    "copyright": "BBC",
+    # "search_model": ["app.model_name"],
+
+    "topmenu_links": [
+        {"model": "auth.User"},
+    ],
+
+    "navigation_expanded": False,
+
+    "hide_apps": ['auth'],
+
+    "show_ui_builder": True,
+
+    "changeform_format": "collapsible",
+
+    # "usermenu_links": [
+    # {"name": "Profile", "url": "profile"},
+    # {"name": "Logout", "url": "logout"},
+    # {"name": "Login", "url": "login"},
+    # {"name": "Signup", "url": "signup"},
+
+    #     ]
+
+}
+
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": True,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": True,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    "actions_sticky_top": False
+}
