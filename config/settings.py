@@ -108,7 +108,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [("bbc-redis", 6379)],
         },
     },
 }
@@ -127,10 +127,10 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bbc',
+        'NAME': 'bbc_db',
         'USER': 'bbc_user',
         'PASSWORD': 'bbc_password',
-        'HOST': 'localhost',
+        'HOST': 'postgres_bbc',  # container name
         'PORT': '5432',
     }
 }
