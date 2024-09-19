@@ -21,7 +21,7 @@ class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = ('id', 'title_uz', 'title_ru', 'description_uz', 'description_ru', 'price', 'year', 'km', 'color_uz',
-                  'color_ru', 'automatic', 'mechanic', 'discount', 'order', 'logo', 'created_at', 'updated_at',
+                  'color_ru', 'image', 'automatic', 'mechanic', 'discount', 'order', 'logo', 'created_at', 'updated_at',
                   'images',)
 
     def to_representation(self, instance):
